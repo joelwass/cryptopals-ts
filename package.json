@@ -1,0 +1,26 @@
+{
+  "name": "cryptopals-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "set1ch1.js",
+  "scripts": {
+    "compile": "tsc",
+    "lint": "standard",
+    "prepublishOnly": "npm run compile",
+    "test": "npm run compile && nyc ava lib/**/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github-private:joelwass/cryptopals-ts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^10.9.4",
+    "@types/should": "^13.0.0",
+    "ava": "^0.25.0"
+  },
+  "devDependencies": {
+    "nyc": "^13.0.1"
+  }
+}
