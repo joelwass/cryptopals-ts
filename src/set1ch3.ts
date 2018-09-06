@@ -1,8 +1,11 @@
+import { englishFrequencyMap } from './helpers'
 
 // iterate from 0 255 and xor with the string
 function singleByteXOR(data: string): string {
     const buff = Buffer.from(data, 'hex')
     const length = buff.length
+    let minScore: number = 1000000000
+    let minString: string = ''
 
     for (let j = 0; j < 256; j++) {
         const outputBuffer = Buffer.allocUnsafe(length)
@@ -11,12 +14,31 @@ function singleByteXOR(data: string): string {
         }
 
         // check to see if this is english!
-        console.log(outputBuffer.toString('hex'))
+        const score: number = scoreStringForEnglish(outputBuffer.toString('ascii'))
+        if (score < minScore) {
+            minScore = score
+            minString = outputBuffer.toString('ascii')
+        }
     }
 
-    return 'hello'
+    return minString
 } 
 
+function scoreStringForEnglish(data: string): number {
+    const letters = Object.keys(englishFrequencyMap)
+    const stringLength = data.length
+    let score = 0
+    letters.forEach(l => {
+        const countOfLetter = (data.match(new RegExp(l, 'g')) || []).length
+        const percentageOccurence = countOfLetter / stringLength * 100
+        const diff: number = ((<any>englishFrequencyMap)[l] * 1000) - (percentageOccurence * 1000)
+        score += diff
+    })
+
+    return score / 1000
+}
+
 export {
-    singleByteXOR
+    singleByteXOR,
+    scoreStringForEnglish
 }
