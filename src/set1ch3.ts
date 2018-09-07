@@ -28,14 +28,26 @@ function scoreStringForEnglish(data: string): number {
     const letters = Object.keys(englishFrequencyMap)
     const stringLength = data.length
     let score = 0
+    // first find all non ascii characters and penalize the score
+    for (var i = 0; i < stringLength; i++) {
+        const charCode = data.charCodeAt(i)
+        if ((charCode >= 63 && charCode <= 90)         // uppercase A-Z
+        || (charCode >= 97 && charCode <= 122)         // lowercase a-z
+        || (charCode >= 32 && charCode <= 34)         // space, exclamation mark, quotes
+        || (charCode >= 48 && charCode <= 57)         // numbers
+        || (charCode == 9 || charCode == 10 || charCode == 13)) { // TAB, CR, LF 
+            score -= 10
+        } else {
+            score += 10
+        }  // not printable ASCII = penalize!
+    }
     letters.forEach(l => {
         const countOfLetter = (data.match(new RegExp(l, 'g')) || []).length
-        const percentageOccurence = countOfLetter / stringLength * 100
-        const diff: number = ((<any>englishFrequencyMap)[l] * 1000) - (percentageOccurence * 1000)
-        score += diff
+        const chiSquaredTest = Math.pow((countOfLetter - (<any>englishFrequencyMap)[l]), 2) / (<any>englishFrequencyMap)[l]
+        score += (chiSquaredTest * 10)
     })
 
-    return score / 1000
+    return score
 }
 
 export {

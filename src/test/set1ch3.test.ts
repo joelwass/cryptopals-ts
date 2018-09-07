@@ -6,13 +6,12 @@ ava.test('decipher single byte xor', async t => {
     t.true(res[1] === 'Cooking MC\'s like a pound of bacon')
 })
 
-ava.test('get english probability score', t => {
-    const score = scoreStringForEnglish('hello world')
-    t.true(score > 9 && score < 10)
-})
-
 ava.test('get english score less than gibberish', t => {
     const score = scoreStringForEnglish('hello world')
     const badScore = scoreStringForEnglish('1298slk2380vns230')
     t.true(score < badScore)
+})
+
+ava.test('good english', t => {
+    t.true(scoreStringForEnglish('Cooking MC\'s like a pound of bacon') < scoreStringForEnglish('Dhhlni`\'JD t\'knlb\'f\'whric\'ha\'efdhi'))
 })

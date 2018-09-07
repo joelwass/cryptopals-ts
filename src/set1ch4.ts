@@ -1,5 +1,3 @@
-import fs = require('fs')
-import readline = require('readline')
 import { singleByteXOR } from './set1ch3'
 
 async function findEnglishLineInFile(fileString: string): Promise<any> {
@@ -22,5 +20,3 @@ async function findEnglishLineInFile(fileString: string): Promise<any> {
 export {
     findEnglishLineInFile
 }
-
-

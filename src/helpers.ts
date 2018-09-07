@@ -25,7 +25,7 @@ const englishFrequencyMap = {
     w: 2.360,
     x: 0.150,
     y: 1.974,
-    z: 0.074
+    z: 0.074,
 }
 
 export {
