@@ -1,7 +1,10 @@
+interface Frequencies {
+    [propName: string]: number
+}
 
-const englishFrequencyMap = {
-    a: 8.167 as number,
-    b: 1.492 as number,
+const englishFrequencyMap: Frequencies = {
+    a: 8.167,
+    b: 1.492,
     c: 2.782,
     d: 4.253,
     e: 12.702,
