@@ -8,3 +8,11 @@ ava.test('find the english from text file single char xor\'d', async t => {
     const testString = await findEnglishLineInFile(textContents)
     t.true(testString.trim() === 'Now that the party is jumping')
 })
+
+ava.test('catch rejection', async t => {
+    try {
+        await findEnglishLineInFile('')
+    } catch (e) {
+        t.true(e === 'no string passed in')
+    }
+})

@@ -37,9 +37,9 @@ function scoreStringForEnglish(data: string): number {
         || (charCode >= 48 && charCode <= 57)         // numbers
         || (charCode == 9 || charCode == 10 || charCode == 13)) { // TAB, CR, LF 
             score -= 10
-        } else {
+        } else { // not printable ASCII = penalize!
             score += 10
-        }  // not printable ASCII = penalize!
+        }
     }
     letters.forEach(l => {
         const countOfLetter = (data.match(new RegExp(l, 'g')) || []).length
