@@ -1,7 +1,7 @@
 import { englishFrequencyMap } from './helpers'
 
 // iterate from 0 255 and xor with the string
-function singleByteXOR(data: string): Array<any> {
+function singleByteXOR(data: string): Promise<Array<any>> {
     const buff = Buffer.from(data, 'hex')
     const length = buff.length
     let minScore: number = 1000000000
@@ -21,7 +21,7 @@ function singleByteXOR(data: string): Array<any> {
         }
     }
 
-    return [minScore, minString]
+    return Promise.resolve([minScore, minString])
 } 
 
 function scoreStringForEnglish(data: string): number {
