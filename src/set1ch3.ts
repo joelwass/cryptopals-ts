@@ -8,7 +8,7 @@ function singleByteXOR(data: string): Promise<Array<any>> {
     let minString: string = ''
 
     for (let j = 0; j < 256; j++) {
-        const outputBuffer = Buffer.allocUnsafe(length)
+        const outputBuffer = Buffer.alloc(length)
         for (let i = 0; i < length; i++) {
             outputBuffer[i] = buff[i] ^ j
         }

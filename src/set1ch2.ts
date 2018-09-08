@@ -10,7 +10,7 @@ function xorHex(data1: string, data2: string): string {
 
     const buff1 = Buffer.from(data1, 'hex')
     const buff2 = Buffer.from(data2, 'hex')
-    const outputBuffer = Buffer.allocUnsafe(buff1.length)
+    const outputBuffer = Buffer.alloc(buff1.length)
 
     for (let i = 0; i < buff1.length; i++) {
         outputBuffer[i] = buff1[i] ^ buff2[i]
