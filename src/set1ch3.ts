@@ -1,11 +1,11 @@
 import { englishFrequencyMap } from './helpers'
 
 // iterate from 0 255 and xor with the string
-function singleByteXOR(data: string): Promise<Array<any>> {
-    const buff = Buffer.from(data, 'hex')
+function singleByteXOR(buff: Buffer): Promise<Array<any>> {
     const length = buff.length
     let minScore: number = 1000000000
     let minString: string = ''
+    let charCode: number = -1
 
     for (let j = 0; j < 256; j++) {
         const outputBuffer = Buffer.alloc(length)
@@ -18,10 +18,11 @@ function singleByteXOR(data: string): Promise<Array<any>> {
         if (score < minScore) {
             minScore = score
             minString = outputBuffer.toString('ascii')
+            charCode = j
         }
     }
 
-    return Promise.resolve([minScore, minString])
+    return Promise.resolve([minScore, minString, charCode])
 } 
 
 function scoreStringForEnglish(data: string): number {

@@ -11,7 +11,8 @@ async function findEnglishLineInFile(fileString: string): Promise<string> {
     const lines = fileString.split('\n')
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i]
-        const [resultScore, resultString] = await singleByteXOR(line)
+        const buff = Buffer.from(line, 'hex')
+        const [resultScore, resultString] = await singleByteXOR(buff)
         if (resultScore < minScore) {
             minScore = resultScore
             minString = resultString

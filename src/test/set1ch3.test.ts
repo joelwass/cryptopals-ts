@@ -2,8 +2,15 @@ import * as ava from 'ava'
 import { singleByteXOR, scoreStringForEnglish } from '../set1ch3'
 
 ava.test('decipher single byte xor', async t => {
-    const res = await singleByteXOR('1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736')
+    const buff = Buffer.from('1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736', 'hex')
+    const res = await singleByteXOR(buff)
     t.true(res[1] === 'Cooking MC\'s like a pound of bacon')
+})
+
+ava.test('decipher single byte xor', async t => {
+    const buff = Buffer.from('1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736', 'hex')
+    const res = await singleByteXOR(buff)
+    t.true(String.fromCharCode(res[2]) === 'X')
 })
 
 ava.test('get english score less than gibberish', t => {
