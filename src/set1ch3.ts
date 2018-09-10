@@ -1,7 +1,7 @@
-import { englishFrequencyMap } from './helpers'
+import { englishFrequency } from './helpers'
 
 // iterate from 0 255 and xor with the string
-function singleByteXOR(buff: Buffer): Promise<Array<any>> {
+async function singleByteXOR(buff: Buffer): Promise<Array<any>> {
     const length = buff.length
     let minScore: number = 1000000000
     let minString: string = ''
@@ -14,7 +14,7 @@ function singleByteXOR(buff: Buffer): Promise<Array<any>> {
         }
 
         // check to see if this is english!
-        const score: number = scoreStringForEnglish(outputBuffer.toString('ascii'))
+        const score: number = await scoreStringForEnglish(outputBuffer.toString('ascii'))
         if (score < minScore) {
             minScore = score
             minString = outputBuffer.toString('ascii')
@@ -25,30 +25,39 @@ function singleByteXOR(buff: Buffer): Promise<Array<any>> {
     return Promise.resolve([minScore, minString, charCode])
 } 
 
-function scoreStringForEnglish(data: string): number {
-    const letters = Object.keys(englishFrequencyMap)
+function scoreStringForEnglish(data: string): Promise<number> {
     const stringLength = data.length
     let score = 0
+    const count: number[] = []
+    let ignored = 0
+    for (let i = 0; i < 26; i++) {
+        count[i] = 0
+    }
     // first find all non ascii characters and penalize the score
     for (var i = 0; i < stringLength; i++) {
-        const charCode = data.charCodeAt(i)
-        if ((charCode >= 63 && charCode <= 90)         // uppercase A-Z
-        || (charCode >= 97 && charCode <= 122)         // lowercase a-z
-        || (charCode >= 32 && charCode <= 34)         // space, exclamation mark, quotes
-        || (charCode >= 48 && charCode <= 57)         // numbers
-        || (charCode == 9 || charCode == 10 || charCode == 13)) { // TAB, CR, LF 
+        const c = data.charCodeAt(i)
+        if (c >= 65 && c <= 90) {         // uppercase A-Z
+            count[c - 65]++
             score -= 10
-        } else { // not printable ASCII = penalize!
-            score += 10
+        } else if ((c >= 97 && c <= 122) || c === 32) { // lowercase a-z
+            count[c - 97]++
+            score -= 10
+        } else if (c >= 33 && c <= 126) { // numbers and punct.
+            ignored++
+            score += 2
+        } else if (c == 9 || c == 10 || c == 13) { // TAB, CR, LF
+            ignored++
+        } else { // not printable ASCII = impossible(?)
+            score += 100000  
         }
     }
-    letters.forEach(l => {
-        const countOfLetter = (data.match(new RegExp(l, 'g')) || []).length
-        const chiSquaredTest = Math.pow((countOfLetter - (<any>englishFrequencyMap)[l]), 2) / (<any>englishFrequencyMap)[l]
-        score += (chiSquaredTest * 10)
-    })
+    for (let i = 0; i < 26; i++) {
+        var observed = count[i], expected = stringLength * englishFrequency[i];
+        var difference = observed - expected;
+        score += difference*difference / expected;
+    }
 
-    return score
+    return Promise.resolve(score)
 }
 
 export {

@@ -13,12 +13,12 @@ ava.test('decipher single byte xor', async t => {
     t.true(String.fromCharCode(res[2]) === 'X')
 })
 
-ava.test('get english score less than gibberish', t => {
-    const score = scoreStringForEnglish('hello world')
-    const badScore = scoreStringForEnglish('1298slk2380vns230')
+ava.test('get english score less than gibberish', async t => {
+    const score = await scoreStringForEnglish('hello world')
+    const badScore = await scoreStringForEnglish('1298slk2380vns230')
     t.true(score < badScore)
 })
 
-ava.test('good english', t => {
-    t.true(scoreStringForEnglish('Cooking MC\'s like a pound of bacon') < scoreStringForEnglish('Dhhlni`\'JD t\'knlb\'f\'whric\'ha\'efdhi'))
+ava.test('good english', async t => {
+    t.true(await scoreStringForEnglish('Cooking MC\'s like a pound of bacon') < await scoreStringForEnglish('Dhhlni`\'JD t\'knlb\'f\'whric\'ha\'efdhi'))
 })

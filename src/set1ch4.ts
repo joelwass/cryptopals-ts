@@ -1,6 +1,6 @@
 import { singleByteXOR } from './set1ch3'
 
-async function findEnglishLineInFile(fileString: string): Promise<string> {
+async function findEnglishLineInFile(fileString: string, encoding: string): Promise<string> {
     let minScore = 1000000
     let minString = ''
 
@@ -11,7 +11,7 @@ async function findEnglishLineInFile(fileString: string): Promise<string> {
     const lines = fileString.split('\n')
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i]
-        const buff = Buffer.from(line, 'hex')
+        const buff = Buffer.from(line, encoding)
         const [resultScore, resultString] = await singleByteXOR(buff)
         if (resultScore < minScore) {
             minScore = resultScore
