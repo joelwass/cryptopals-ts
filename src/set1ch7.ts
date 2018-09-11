@@ -1,11 +1,10 @@
-const aesjs = require('aes-js')
+import * as crypto from 'crypto'
 
 function decryptAES128InECB(data: Buffer, key: Buffer): Buffer {
-    const aesEcb = new aesjs.ModeOfOperation.ecb(key)
-    const decryptedBytes = aesEcb.decrypt(data)
-    const decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes)
+    const decipher = crypto.createDecipheriv('aes-128-ecb', key, '')
+    const decipheredText = decipher.update(data);
 
-    return decryptedText
+    return decipheredText
 }
 
 export {
