@@ -1,4 +1,4 @@
-import { englishFrequency } from './helpers'
+import { englishFrequency } from '../helpers'
 
 // iterate from 0 255 and xor with the string
 async function singleByteXOR(buff: Buffer): Promise<Array<any>> {

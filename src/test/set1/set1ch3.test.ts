@@ -1,5 +1,5 @@
 import * as ava from 'ava'
-import { singleByteXOR, scoreStringForEnglish } from '../set1ch3'
+import { singleByteXOR, scoreStringForEnglish } from '../../set1/set1ch3'
 
 ava.test('decipher single byte xor', async t => {
     const buff = Buffer.from('1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736', 'hex')

@@ -1,5 +1,5 @@
 import * as ava from 'ava'
-import { compareBuffLength, xorHex } from '../set1ch2'
+import { compareBuffLength, xorHex } from '../../set1/set1ch2'
 
 ava.test('test no difference in lengths between hex strings', t => {
     t.true(compareBuffLength('ffff', 'ffff'))

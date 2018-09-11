@@ -6,13 +6,13 @@ import {
     computeKeySize,
     breakRepeatingXor,
     getRepeatingXorKey
- } from '../set1ch6'
+ } from '../../set1/set1ch6'
 import {
     repeatingKeyXor
-} from '../set1ch5'
+} from '../../set1/set1ch5'
 import {
     scoreStringForEnglish
-} from '../set1ch3'
+} from '../../set1/set1ch3'
 
 ava.test('test hamming distance of two strings', t => {
     const buff1 = Buffer.from('this is a test', 'ascii')
@@ -33,7 +33,7 @@ ava.test('buffers not same length throws error for hamming distance', t => {
 })
 
 ava.test('get keysize of buffer', t => {
-    const textContents = fs.readFileSync(path.join(__dirname, '../../files/set1ch6text.txt'), { encoding: 'ascii' })
+    const textContents = fs.readFileSync(path.join(__dirname, '../../../files/set1ch6text.txt'), { encoding: 'ascii' })
     const buff = Buffer.from(textContents, 'base64')
     const keySizes = computeKeySize(buff)
 
@@ -41,7 +41,7 @@ ava.test('get keysize of buffer', t => {
 })
 
 ava.test('get repeating key xor key', async t => {
-    const textContents = fs.readFileSync(path.join(__dirname, '../../files/set1ch6text.txt'), { encoding: 'ascii' })
+    const textContents = fs.readFileSync(path.join(__dirname, '../../../files/set1ch6text.txt'), { encoding: 'ascii' })
     const buff = Buffer.from(textContents, 'base64')
     const res = await getRepeatingXorKey(buff)
 
@@ -49,17 +49,17 @@ ava.test('get repeating key xor key', async t => {
 })
 
 ava.test('do your own repeating xor stuff', async t => {
-    const testInput = fs.readFileSync(path.join(__dirname, '../../files/set1ch6text2.txt'), { encoding: 'ascii' })
+    const testInput = fs.readFileSync(path.join(__dirname, '../../../files/set1ch6text2.txt'), { encoding: 'ascii' })
     const testKey = 'CACtuS'
     const testXorBuffer = repeatingKeyXor(Buffer.from(testInput, 'ascii'), testKey)
     const base64d = testXorBuffer.toString('base64')
     try {
-        await fs.writeFileSync(path.join(__dirname, '../../files/set1ch6output.txt'), base64d)
+        await fs.writeFileSync(path.join(__dirname, '../../../files/set1ch6output.txt'), base64d)
     } catch (e) {
         console.log(e)
     }
 
-    const textContents = fs.readFileSync(path.join(__dirname, '../../files/set1ch6output.txt'), { encoding: 'ascii' })
+    const textContents = fs.readFileSync(path.join(__dirname, '../../../files/set1ch6output.txt'), { encoding: 'ascii' })
     const buff = Buffer.from(textContents, 'base64')
     const res = await breakRepeatingXor(buff)
 
@@ -67,7 +67,7 @@ ava.test('do your own repeating xor stuff', async t => {
 })
 
 ava.test('break repeating key xor', async t => {
-    const textContents = fs.readFileSync(path.join(__dirname, '../../files/set1ch6text.txt'), { encoding: 'ascii' })
+    const textContents = fs.readFileSync(path.join(__dirname, '../../../files/set1ch6text.txt'), { encoding: 'ascii' })
     const buff = Buffer.from(textContents, 'base64')
     const res = await breakRepeatingXor(buff)
 

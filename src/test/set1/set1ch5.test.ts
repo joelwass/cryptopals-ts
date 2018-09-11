@@ -1,5 +1,5 @@
 import * as ava from 'ava'
-import { repeatingKeyXor } from '../set1ch5'
+import { repeatingKeyXor } from '../../set1/set1ch5'
 
 ava.test('should repeating key xor', t => {
     const buff = Buffer.from('Burning \'em, if you ain\'t quick and nimble\nI go crazy when I hear a cymbal', 'ascii')
