@@ -7,8 +7,7 @@ function addPKCS7Padding(data: Buffer, padding: number): Buffer {
         if (i < data.length) {
             retBuffer[i] = data[i]
         } else {
-            console.log(Buffer.from(`${padding}`, 'hex'))
-            retBuffer[i] = Buffer.from(`${padding}`, 'hex')[0]
+            retBuffer[i] = padding
         }
     }
     return retBuffer

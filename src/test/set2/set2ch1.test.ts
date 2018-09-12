@@ -5,6 +5,5 @@ ava.test('add padding to buffer', t => {
     const inputBuffer = Buffer.from('YELLOW SUBMARINE')
     t.true(inputBuffer.length === 16)
     const paddedBuffer = addPKCS7Padding(inputBuffer, 4)
-    console.log(paddedBuffer)
     t.true(paddedBuffer.length === 20)
 })
