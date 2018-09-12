@@ -1,19 +1,12 @@
 function detectAESinECBMode(data: Buffer): boolean {
     // iterate over 16 byte blocks and try to detect a repeat
-    const dataLength: number = data.length
-    const blocks: Array<string> = []
+    const blocks = new Set()
 
-    // console.log(data)
-
-    for (let i = 0; i < (dataLength / 16); i++) {
+    for (let i = 0; i < (data.length / 16); i++) {
         const chunk: Buffer = data.slice(i*16, (i+1)*16)
-        blocks.push(chunk.toString('hex'))
+        blocks.add(chunk.toString('hex'))
     }
-
-    const numberOfBlocks: number = blocks.length
-    const blockSet: Set<string> = new Set(blocks)
-
-    if (numberOfBlocks !== blockSet.size) {
+    if ((data.length / 16) !== blocks.size) {
         return true
     }
     return false
