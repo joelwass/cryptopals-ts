@@ -11,6 +11,5 @@ ava.test('add padding to buffer of lesser size than the blocksize', t => {
 ava.test('add padding to buffer of greater size than the blocksize', t => {
     const inputBuffer = Buffer.from('YELLOW SUBMARINE BLAH BLAH')
     const paddedBuffer = addPKCS7Padding(inputBuffer, 20)
-    console.log(paddedBuffer)
     t.true(paddedBuffer.length === 40)
 })
