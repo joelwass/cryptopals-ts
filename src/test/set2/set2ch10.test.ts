@@ -9,7 +9,7 @@ ava.test('encrypt aes 128 in cbc', t => {
 
 ava.test('decrypt aes 128 in cbc', t => {
     const data = fs.readFileSync(path.join(__dirname, '../../../files/set2ch10text.txt'), { encoding: 'ascii' })
-    const IV = Buffer.from('0 (\x00\x00\x00 &c)', 'ascii')
+    const IV = Buffer.alloc(16, 0)
     const key = Buffer.from('YELLOW SUBMARINE', 'ascii')
 
     const decrypted = decryptAES128inCBC(Buffer.from(data, 'ascii'), key, IV)
