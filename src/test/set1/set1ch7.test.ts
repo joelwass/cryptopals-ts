@@ -11,10 +11,10 @@ ava.test('decrypt aes 128 ecb with key', t => {
 })
 
 ava.test('encrypt aes 128 ecb with key', t => {
-    const data = fs.readFileSync(path.join(__dirname, '../../../files/set1ch6text2.txt'), { encoding: 'ascii' })
+    const data = 'EXACTLY 16 BYTES'
     // encrypt
     const encryptedText = encryptAES128InECB(Buffer.from(data, 'ascii'), Buffer.from('YELLOW SUBMARINE', 'ascii'))
     // decrypt
     const decryptedText = decryptAES128InECB(encryptedText, Buffer.from('YELLOW SUBMARINE', 'ascii'))
-    t.true(decryptedText.toString('ascii').includes('If you also wish to estimate the actual likelihood'))
+    t.is(decryptedText.toString('ascii'), data)
 })

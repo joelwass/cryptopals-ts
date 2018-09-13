@@ -12,7 +12,7 @@ ava.test('decrypt aes 128 in cbc', t => {
     const IV = Buffer.alloc(16, 0)
     const key = Buffer.from('YELLOW SUBMARINE', 'ascii')
 
-    const decrypted = decryptAES128inCBC(Buffer.from(data, 'ascii'), key, IV)
+    const decrypted = decryptAES128inCBC(Buffer.from(data, 'base64'), key, IV)
     console.log(decrypted.toString('ascii'))
     t.pass()
 })
