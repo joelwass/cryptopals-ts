@@ -11,7 +11,7 @@ ava.test('decrypt aes 128 ecb with key', t => {
 })
 
 ava.test('encrypt aes 128 ecb with key', t => {
-    const data = 'EXACTLY 16 BYTES'
+    const data = 'EXACTLY 16 BYTESEXACTLY 16 BYTES'
     // encrypt
     const encryptedText = encryptAES128InECB(Buffer.from(data, 'ascii'), Buffer.from('YELLOW SUBMARINE', 'ascii'))
     // decrypt

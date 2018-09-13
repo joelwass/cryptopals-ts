@@ -14,7 +14,7 @@ function encryptAES128inCBC(data: Buffer, key: Buffer, iv: Buffer) {
         }
         const cipherBlock = encryptAES128InECB(ivBlock, key)
         for (let j = 0; j < 16; j++) {
-            encryptedData[j] = cipherBlock[j]
+            encryptedData[(j + (i * 16))] = cipherBlock[j]
         }
         ivValue = cipherBlock
     }
