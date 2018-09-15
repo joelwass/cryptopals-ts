@@ -1,6 +1,7 @@
 import * as crypto from 'crypto'
 import { encryptAES128inCBC } from './set2ch10'
 import { encryptAES128InECB } from '../set1/set1ch7'
+import { detectAESinECBMode } from '../set1/set1ch8'
 
 function genRandomAESKey(): Buffer {
     return crypto.randomBytes(16)    
@@ -18,11 +19,12 @@ function encryptDataRandomModeAndKey(data: Buffer): Buffer {
     return encryptedData
 }
 
-function ecbCBCDetectionOracle(data: Buffer): Buffer {
-    
+function ecbCBCDetectionOracle(data: Buffer): string {
+    return detectAESinECBMode(data) ? 'ECB' : 'CBC'
 }
 
 export {
     genRandomAESKey,
-    encryptDataRandomModeAndKey
+    encryptDataRandomModeAndKey,
+    ecbCBCDetectionOracle
 }
