@@ -15,9 +15,12 @@ ava.test('should generate random crypto key of 16 bytes', t => {
 ava.test('should encrypt data in random mode', t => {
     // not sure how to test this  
     const data = fs.readFileSync(path.join(__dirname, '../../../files/set2ch10text.txt'), { encoding: 'ascii' })
-    t.pass()
+    const [_, encryptionMethod] = encryptDataRandomModeAndKey(Buffer.from(data, 'ascii'))
+    t.true((encryptionMethod === 'ECB') || (encryptionMethod === 'CBC'))
 })
 
-ava.test('should ', t => {
-    t.pass()
+ava.test('should detect if cbc or ecb', t => {
+    const data = fs.readFileSync(path.join(__dirname, '../../../files/set2ch10text.txt'), { encoding: 'ascii' })
+    const [encrypted, encryptionMethod] = encryptDataRandomModeAndKey(Buffer.from(data, 'ascii'))
+    t.true(ecbCBCDetectionOracle(encrypted) === encryptionMethod)
 })

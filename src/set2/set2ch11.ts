@@ -7,16 +7,16 @@ function genRandomAESKey(): Buffer {
     return crypto.randomBytes(16)    
 }
 
-function encryptDataRandomModeAndKey(data: Buffer): Buffer {
+function encryptDataRandomModeAndKey(data: Buffer): Array<any> {
     const key: Buffer = genRandomAESKey()
     let encryptedData: Buffer
     const encryptionMethod = (Math.random() * 2) > 1 ? 'ECB' : 'CBC'
     if (encryptionMethod === 'ECB') {
-        encryptedData = encryptAES128InECB(key, data)
+        encryptedData = encryptAES128InECB(data, key)
     } else {
-        encryptedData = encryptAES128inCBC(key, data, crypto.randomBytes(16))
+        encryptedData = encryptAES128inCBC(data, key, crypto.randomBytes(16))
     }
-    return encryptedData
+    return [encryptedData, encryptionMethod]
 }
 
 function ecbCBCDetectionOracle(data: Buffer): string {
