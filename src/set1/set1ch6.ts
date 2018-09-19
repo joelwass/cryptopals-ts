@@ -34,9 +34,15 @@ function computeKeySize(buff: Buffer): Array<number> {
         const normalized1 = hamming1 / i
         const hamming2 = computeHammingDistance(sliced3, sliced4)
         const normalized2 = hamming2 / i
-        const avg = (normalized1 + normalized2) / 2
+        const hamming3 = computeHammingDistance(sliced1, sliced4)
+        const normalized3 = hamming3 / i
+        const hamming4 = computeHammingDistance(sliced2, sliced4)
+        const normalized4 = hamming4 / i
+        const hamming5 = computeHammingDistance(sliced1, sliced3)
+        const normalized5 = hamming5 / i
+        const avg = (normalized1 + normalized2 + normalized3 + normalized4 + normalized5) / 5
 
-        if (minHammings.length < 10) {
+        if (minHammings.length < 5) {
             minHammings.push(avg)
             keyLengths.push(i)
         } else {
