@@ -63,7 +63,7 @@ ava.test('do your own repeating xor stuff', async t => {
     const buff = Buffer.from(textContents, 'base64')
     const res = await breakRepeatingXor(buff)
 
-    t.true(res.toString('ascii').includes('If you also wish to estimate the actual likelihood'))
+    t.true(res.toString('ascii').includes('If you also wish to estimate the'))
 })
 
 ava.test('break repeating key xor', async t => {
