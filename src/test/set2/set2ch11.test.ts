@@ -22,5 +22,6 @@ ava.test('should encrypt data in random mode', t => {
 ava.test('should detect if cbc or ecb', t => {
     const data = fs.readFileSync(path.join(__dirname, '../../../files/set2ch10text.txt'), { encoding: 'ascii' })
     const [encrypted, encryptionMethod] = encryptDataRandomModeAndKey(Buffer.from(data, 'ascii'))
+    console.log(encryptionMethod)
     t.true(ecbCBCDetectionOracle(encrypted) === encryptionMethod)
 })

@@ -9,7 +9,7 @@ ava.test('detect aes in ecb node', t => {
     const potentialAESLines = []
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i]
-        const isAESinECB = detectAESinECBMode(Buffer.from(line, 'hex'))
+        const isAESinECB = detectAESinECBMode(Buffer.from(line, 'hex'), 16)
         if (isAESinECB) {
             potentialAESLines.push(line)
         }

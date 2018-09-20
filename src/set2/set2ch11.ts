@@ -20,7 +20,8 @@ function encryptDataRandomModeAndKey(data: Buffer): Array<any> {
 }
 
 function ecbCBCDetectionOracle(data: Buffer): string {
-    return detectAESinECBMode(data) ? 'ECB' : 'CBC'
+    console.log('detect?', detectAESinECBMode(data, 16))
+    return detectAESinECBMode(data, 16) ? 'ECB' : 'CBC'
 }
 
 export {

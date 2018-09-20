@@ -1,19 +1,30 @@
-import { computeKeySize } from '../set1/set1ch6'
 import { encryptAES128InECB } from '../set1/set1ch7'
 import { genRandomAESKey } from '../set2/set2ch11'
+import { detectAESinECBMode } from '../set1/set1ch8'
 
 const key = genRandomAESKey(16)
 
 function byteAtaTimeECBDecryption(unknownString: Buffer) {
 
-    for (let i = 40; i < 41; i++) {
+    const initialEncrypted: Buffer = serverEncryption(Buffer.alloc(0), unknownString)
+    const initialLength: number = initialEncrypted.length
+    let blockSize: number
+
+    // get block size
+    for (let i = 0; i < 41; i++) {
         let str = 'A'.repeat(i)
         let myStringBuff = Buffer.from(str, 'ascii')
 
         let encrypted = serverEncryption(myStringBuff, unknownString)
-        console.log(computeKeySize(encrypted))
+        if (encrypted.length !== initialLength) {
+            // block size has increased by block size amount, so let's find block size
+            blockSize = encrypted.length - initialLength
+            break
+        }
     }
 
+    // detect ecb or cbc
+    const isECB = detectAESinECBMode(unknownString, blockSize)
 }
 
 function serverEncryption(data: Buffer, unknownString: Buffer): Buffer {
