@@ -28,7 +28,7 @@ async function byteAtaTimeECBDecryption(unknownString: Buffer) {
     let knownValues = ''
 
     // iterate over each letter in blocksize 
-    for (let i = 1; i <= 1; i++ {
+    for (let i = 1; i <= 1; i++) {
         // pass in a string of length block size - 1
         const ourString = 'A'.repeat(blockSize - i)
 
