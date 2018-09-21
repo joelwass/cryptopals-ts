@@ -4,7 +4,7 @@ import { detectAESinECBMode } from '../set1/set1ch8'
 
 const key = genRandomAESKey(16)
 
-async function byteAtaTimeECBDecryption(unknownString: Buffer) {
+async function byteAtaTimeECBDecryption(unknownString: Buffer): Promise<any> {
 
     const initialEncrypted: Buffer = await serverEncryption(Buffer.alloc(0), unknownString)
     const initialLength: number = initialEncrypted.length
@@ -25,10 +25,14 @@ async function byteAtaTimeECBDecryption(unknownString: Buffer) {
 
     // detect ecb or cbc
     const isECB = detectAESinECBMode(unknownString, blockSize)
+    if (!isECB) {
+        return Promise.reject('not ECB!')
+    }
+
     let knownValues = ''
 
     // iterate over each letter in blocksize 
-    for (let i = 1; i <= 1; i++) {
+    for (let i = 1; i <= blockSize; i++) {
         // pass in a string of length block size - 1
         const ourString = 'A'.repeat(blockSize - i)
 
@@ -37,11 +41,14 @@ async function byteAtaTimeECBDecryption(unknownString: Buffer) {
 
         // iterate over all char codes
         for (let j = 0; j < 256; j++) {
-            const serverTestInput = ourString + String.fromCharCode(j) + knownValues
+            const serverTestInput = ourString + knownValues + String.fromCharCode(j)
+            // console.log(serverTestInput)
             const serverTestOutput = await serverEncryption(Buffer.from(serverTestInput), unknownString)
-            if (serverTestOutput == serverOutput) {
+            if (serverTestOutput.slice(0, blockSize).equals(serverOutput.slice(0, blockSize))) {
+                console.log('match', j)
                 knownValues = String.fromCharCode(j) + knownValues
                 console.log(knownValues)
+                break;
             }
         }
     }
