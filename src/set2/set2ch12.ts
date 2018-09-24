@@ -29,31 +29,36 @@ async function byteAtaTimeECBDecryption(unknownString: Buffer): Promise<any> {
         return Promise.reject('not ECB!')
     }
 
-    let knownValues = ''
+    let crackedString = ''
+    let tmpUnknownString = unknownString
+    // iterate over however many blocksizes we have in unkonwn string
+    for (let k = 0; k < (unknownString.length / blockSize); k++) {
+        let knownBlockValues = ''
+        tmpUnknownString = unknownString.slice((k*blockSize))
 
-    // iterate over each letter in blocksize 
-    for (let i = 1; i <= blockSize; i++) {
-        // pass in a string of length block size - 1
-        const ourString = 'A'.repeat(blockSize - i)
-
-        // capture output from server of blocksize - i
-        const serverOutput = await serverEncryption(Buffer.from(ourString, 'ascii'), unknownString)
-
-        // iterate over all char codes
-        for (let j = 0; j < 256; j++) {
-            const serverTestInput = ourString + knownValues + String.fromCharCode(j)
-            // console.log(serverTestInput)
-            const serverTestOutput = await serverEncryption(Buffer.from(serverTestInput), unknownString)
-            if (serverTestOutput.slice(0, blockSize).equals(serverOutput.slice(0, blockSize))) {
-                console.log('match', j)
-                knownValues = String.fromCharCode(j) + knownValues
-                console.log(knownValues)
-                break;
+        // iterate over each letter in blocksize 
+        for (let i = 1; i <= blockSize; i++) {
+            // pass in a string of length block size - 1
+            const ourString = 'A'.repeat(blockSize - i)
+    
+            // capture output from server of blocksize - i
+            const serverOutput = await serverEncryption(Buffer.from(ourString, 'ascii'), tmpUnknownString)
+    
+            // iterate over all char codes
+            for (let j = 0; j < 128; j++) {
+                const serverTestInput = ourString + knownBlockValues + String.fromCharCode(j)
+                // console.log(serverTestInput)
+                const serverTestOutput = await serverEncryption(Buffer.from(serverTestInput), tmpUnknownString)
+                if (serverTestOutput.slice(0, blockSize).equals(serverOutput.slice(0, blockSize))) {
+                    knownBlockValues = knownBlockValues + String.fromCharCode(j)
+                    crackedString = crackedString + String.fromCharCode(j)
+                    break;
+                }
             }
         }
     }
 
-
+    return Promise.resolve(crackedString)
 }
 
 function serverEncryption(data: Buffer, unknownString: Buffer): Promise<Buffer> {
