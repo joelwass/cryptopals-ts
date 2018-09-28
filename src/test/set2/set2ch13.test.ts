@@ -21,22 +21,11 @@ ava.test('should parse cookie', t => {
 })
 
 ava.test('should create user profile from email', t => {
-    const expectedReturn = {
-        email: 'foo@bar.com',
-        uid: 10,
-        role: 'user'
-    }   
-    t.true(profileFor('foo@bar.com').email === expectedReturn.email)
-    t.true(profileFor('foo@bar.com').role === expectedReturn.role)
+    t.true(profileFor('foo@bar.com') === 'email=foo@bar.com&uid=10&role=user')
 })
 
-ava.test('should create user profile from email with metaencoding characters by eating them', t => {
-    const expectedReturn = {
-        email: 'foo@bar.comtesttrue',
-        uid: 10,
-        role: 'user'
-    }   
-    t.true(profileFor('foo@bar.com&test=true').email === expectedReturn.email)
+ava.test('should create user profile from email with metaencoding characters by eating them', t => { 
+    t.true(profileFor('foo@bar.com&test=true') === 'email=foo@bar.comtesttrue&uid=10&role=user')
 })
 
 ava.test('should encrypt and decrypt profile after creating one', t => {
@@ -48,4 +37,8 @@ ava.test('should encrypt and decrypt profile after creating one', t => {
     const profile = profileFor('foo@bar.com')
     const encryptedProfile = encryptProfile(profile, key)
     t.true(decryptProfile(encryptedProfile, key).toString('ascii').includes('foo@bar.com'))
+})
+
+ava.test('should change role to admin through encrypted text', t => {
+
 })

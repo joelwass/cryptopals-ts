@@ -11,12 +11,7 @@ interface user_profile {
 
 function profileFor(email: string): any {
     const cleanedEmail = email.replace('&', '').replace('=', '')
-    const retObject:user_profile = {
-        email: cleanedEmail,
-        uid: Math.random() * 100,
-        role: 'user'
-    }
-    return retObject
+    return `email=${cleanedEmail}&uid=${10}&role=user`
 }   
 
 function parseCookie(cookie: string): any {
