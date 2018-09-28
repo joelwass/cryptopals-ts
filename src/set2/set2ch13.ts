@@ -9,7 +9,7 @@ interface user_profile {
     role: string
 }
 
-function profileFor(email: string): any {
+function profileFor(email: string): string {
     const cleanedEmail = email.replace('&', '').replace('=', '')
     return `email=${cleanedEmail}&uid=${10}&role=user`
 }   
@@ -24,8 +24,7 @@ function parseCookie(cookie: string): any {
     return retObject
 }
 
-function encryptProfile(profileObject: any, key: Buffer): Buffer {
-    const profileString = JSON.stringify(profileObject)
+function encryptProfile(profileString: string, key: Buffer): Buffer {
     const data = Buffer.from(profileString, 'ascii')
 
     return encryptAES128InECB(data, key)
