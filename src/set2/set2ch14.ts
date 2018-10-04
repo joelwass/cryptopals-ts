@@ -6,7 +6,7 @@ import { detectAESinECBMode } from '../set1/set1ch8'
 const key = genRandomAESKey(16)
 // generate a random prefix of some random amount of bytes [0, 100]
 const randomPrefix = crypto.randomBytes(Math.random() * 100)
-const unknownString = Buffer.from('Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK', 'ascii')
+const unknownString = Buffer.from('Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkgaGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBqdXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUgYnkK', 'base64')
 
 function extendedServerEncryption(attackerControlled: Buffer): Promise<Buffer> {
     const totalData = Buffer.concat([randomPrefix, attackerControlled, unknownString], randomPrefix.length + attackerControlled.length + unknownString.length)
@@ -42,6 +42,27 @@ async function crackServerEncryption() {
     if (!isECB) {
         return Promise.reject('not ECB!')
     }
+
+    const ourString = 'A'.repeat(2*blockSize)
+    const secondEncrypted: Buffer = await extendedServerEncryption(Buffer.from(ourString, 'ascii'))
+
+    const numberOfBlocks = secondEncrypted.length / blockSize
+    let lastBlock = secondEncrypted[0]
+    let currentBlock, foundIndex;
+    for (let i = 1; i < numberOfBlocks; i++) {
+        currentBlock = secondEncrypted[i]
+        // if current block equals last block, we've found our A's
+        if (currentBlock === lastBlock) {
+            foundIndex = i+1
+        }
+    }
+
+    const unknownStringSlice = Buffer.alloc(numberOfBlocks - foundIndex)
+    for (let i = foundIndex; i < numberOfBlocks; i++) {
+        unknownStringSlice[i] = secondEncrypted[i]
+    }
+
+    // now we have just our unknown string in a buffer
 }
 
 export {
