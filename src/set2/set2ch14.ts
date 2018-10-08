@@ -49,15 +49,15 @@ async function crackServerEncryption() {
     const secondEncrypted: Buffer = await extendedServerEncryption(Buffer.from(ourString, 'ascii'))
 
     const numberOfBlocks = secondEncrypted.length / blockSize
-    console.log(numberOfBlocks);
-    let lastBlock = secondEncrypted[0]
-    let currentBlock, foundIndex;
-    for (let i = 1; i < numberOfBlocks; i++) {
-        currentBlock = secondEncrypted[i]
+    let lastBlock: Buffer = secondEncrypted.slice(0, blockSize)
+    let currentBlock: Buffer, foundIndex;
+    for (let i = 1; i < numberOfBlocks-1; i++) {
+        currentBlock = secondEncrypted.slice((i*blockSize), ((i+1)*blockSize))
         // if current block equals last block, we've found our A's
-        if (currentBlock === lastBlock) {
+        if (currentBlock.equals(lastBlock)) {
             foundIndex = i+1
         }
+        lastBlock = currentBlock
     }
 
     console.log('found index', foundIndex)
