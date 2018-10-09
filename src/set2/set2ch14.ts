@@ -13,7 +13,7 @@ function extendedServerEncryption(attackerControlled: Buffer): Promise<Buffer> {
     return Promise.resolve(encryptAES128InECB(totalData, key))
 }
 
-async function crackServerEncryption() {
+async function crackServerEncryption(): Promise<any> {
     // so we're going to do similar to ch12.
     // find the blocksize. then determine it's ecb
     // then add TWO full blocks of repeated 'A''s (they will be put in between garbage and unknown string)
@@ -67,7 +67,37 @@ async function crackServerEncryption() {
         unknownStringSlice[i] = secondEncrypted[i]
     }
 
-    // now we have just our unknown string in a buffer
+    // now we have just our unknown string (plus some A's) in a buffer
+    let crackedString = ''
+    let tmpUnknownString = unknownString
+    // iterate over however many blocksizes we have in unkonwn string
+    for (let k = 0; k < (unknownString.length / blockSize); k++) {
+        let knownBlockValues = ''
+        tmpUnknownString = unknownString.slice((k*blockSize))
+
+        // iterate over each letter in blocksize 
+        for (let i = 1; i <= blockSize; i++) {
+            // pass in a string of length block size - 1
+            const ourString = 'A'.repeat(blockSize - i)
+    
+            // capture output from server of blocksize - i
+            const serverOutput = await extendedServerEncryption(Buffer.from(ourString, 'ascii'))
+    
+            // iterate over all char codes
+            for (let j = 0; j < 128; j++) {
+                const serverTestInput = ourString + knownBlockValues + String.fromCharCode(j)
+                // console.log(serverTestInput)
+                const serverTestOutput = await extendedServerEncryption(Buffer.from(serverTestInput))
+                if (serverTestOutput.slice(0, blockSize).equals(serverOutput.slice(0, blockSize))) {
+                    knownBlockValues = knownBlockValues + String.fromCharCode(j)
+                    crackedString = crackedString + String.fromCharCode(j)
+                    break;
+                }
+            }
+        }
+    }
+
+    return Promise.resolve(crackedString)
 }
 
 export {
