@@ -37,8 +37,6 @@ async function crackServerEncryption(): Promise<any> {
         }
     }
 
-    console.log('blocksize', blockSize)
-
     // detect ecb or cbc
     const isECB = detectAESinECBMode(unknownString, blockSize)
     if (!isECB) {
@@ -60,8 +58,6 @@ async function crackServerEncryption(): Promise<any> {
         lastBlock = currentBlock
     }
 
-    console.log('found index', foundIndex)
-
     const unknownStringSlice = Buffer.alloc(numberOfBlocks - foundIndex)
     for (let i = foundIndex; i < numberOfBlocks; i++) {
         unknownStringSlice[i] = secondEncrypted[i]
@@ -81,13 +77,13 @@ async function crackServerEncryption(): Promise<any> {
             const ourString = 'A'.repeat(blockSize - i)
     
             // capture output from server of blocksize - i
-            const serverOutput = await extendedServerEncryption(Buffer.from(ourString, 'ascii'))
+            const serverOutput = await extendedServerEncryption(Buffer.concat([Buffer.from(ourString, 'ascii'), tmpUnknownString]))
     
             // iterate over all char codes
             for (let j = 0; j < 128; j++) {
                 const serverTestInput = ourString + knownBlockValues + String.fromCharCode(j)
                 // console.log(serverTestInput)
-                const serverTestOutput = await extendedServerEncryption(Buffer.from(serverTestInput))
+                const serverTestOutput = await extendedServerEncryption(Buffer.concat([Buffer.from(ourString, 'ascii'), tmpUnknownString]))
                 if (serverTestOutput.slice(0, blockSize).equals(serverOutput.slice(0, blockSize))) {
                     knownBlockValues = knownBlockValues + String.fromCharCode(j)
                     crackedString = crackedString + String.fromCharCode(j)
