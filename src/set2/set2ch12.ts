@@ -37,7 +37,7 @@ async function byteAtaTimeECBDecryption(): Promise<any> {
     for (let i = 1; i <= initialLength; i++) {
         // pass in a string of length block size - 1
         const ourString = 'A'.repeat(initialLength - i)
-        const currentBlock = (numberOfBlocks - 1) - (blockSize % i)
+        const currentBlock = (numberOfBlocks - 1) - (i % blockSize)
 
         // capture output from server of blocksize - i
         const serverOutput = await serverEncryption(Buffer.from(ourString, 'ascii'))
